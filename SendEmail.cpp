@@ -1,5 +1,11 @@
 #include "SendEmail.h"
 
+void SendEmail::greating()
+{
+    std::cout << "Welcome on board!" << std::endl;
+    std::cout << "Our mission is to provide accurate weather information for our upcoming trip in July."<<std::endl;
+}
+
 EnterData SendEmail::getData() const
 {
     return this->data;
@@ -160,6 +166,13 @@ void SendEmail::sendEmail()
 
     std::cout << "Email sent successfully." << std::endl;
 
+}
+
+void SendEmail::startApplication()
+{
+    greating();
+    enterData();
+    sendEmail();
 }
 
 

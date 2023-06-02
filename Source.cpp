@@ -3,9 +3,8 @@
 
 int main()
 {
-	SendEmail a;
-	a.enterData();
-	a.sendEmail();
-	
+	SendEmail app;
+	app.startApplication();
+	return 0;
 
 }

@@ -6,6 +6,7 @@ class EnterData
 private :
 	Commands command;
 public:
+
 	Commands getCommands()const;
 	void setNameFile();
 	void setEmails();

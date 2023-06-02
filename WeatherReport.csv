@@ -1,7 +1,7 @@
-Parameter,Average value,Max value,Min value,Median value,Launch Day
-Temperature (C),N/A,N/A,N/A,N/A,N/A
-Wind speed (m/s),N/A,N/A,N/A,N/A,N/A
-Humidity (%),N/A,N/A,N/A,N/A,N/A
-Precipitation (%),N/A,N/A,N/A,N/A,N/A
-Lightning (y/n),N/A,N/A,N/A,N/A,N/A
-Clouds,N/A,N/A,N/A,N/A,N/A
+Parameter,Average value,Max value,Min value,Median value,Launch Day - 15 July
+Temperature (C),7.687500,29,2,4.500000,3
+Wind speed (m/s),21.437500,67,2,3.000000,3
+Humidity (%),20.312500,65,0,18.500000,4
+Precipitation (%),19.062500,65,0,15.000000,0
+Lightning (y/n),,,,,No
+Clouds,,,,,Cirrus

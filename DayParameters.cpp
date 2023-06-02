@@ -20,7 +20,7 @@ void DayParameters::setDay(int day)
 	}
 	else
 	{
-		throw std::out_of_range("The date is incorrect");
+		throw std::out_of_range("The date is incorrect.");
 	}
 }
 
@@ -37,7 +37,7 @@ void DayParameters::setWind(int wind)
 	}
 	else
 	{
-		throw std::out_of_range("The speed of wind couldn`t be negative");
+		throw std::out_of_range("The speed of wind couldn`t be negative.");
 	}
 }
 
@@ -49,7 +49,7 @@ void DayParameters::setHumidity(int humidity)
 	}
 	else
 	{
-		throw std::out_of_range("The percentage of the humidity couldn`t be negative");
+		throw std::out_of_range("The percentage of the humidity couldn`t be negative.");
 	}
 }
 
@@ -61,7 +61,7 @@ void DayParameters::setPrecipitation(int precipitation)
 	}
 	else
 	{
-		throw std::out_of_range("The percentage of the humidity couldn`t be negative");
+		throw std::out_of_range("The percentage of the humidity couldn`t be negative.");
 	}
 }
 
@@ -78,7 +78,7 @@ void DayParameters::setLightning(std::string lightning)
 	}
 	else
 	{
-		throw std::invalid_argument("Invalid information for lightning storm");
+		throw std::invalid_argument("Invalid information for lightning storm.");
 	}
 
 }

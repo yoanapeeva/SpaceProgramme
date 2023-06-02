@@ -174,7 +174,7 @@ void Commands::readAllInformationFromFile(std::ifstream& file)
 void Commands::enterNameOfFile()
 {
 	std::string fileName;
-	std::cout << "Please enter the name of the file : " << std::endl;
+	std::cout << "Please enter the name of the file : (csv format)" << std::endl;
 	bool tmp = true;
 	while (tmp)
 	{
@@ -323,7 +323,7 @@ void Commands::enterAdditionalDates(int numberOfDays)
 
 void Commands::addDataManuallyQuestion()
 {
-	std::cout << "Do you want to add data manually? (y/n) " << std::endl;
+	std::cout << "Do you want to add data to the table manually ? (y/n) " << std::endl;
 	bool tmp = true;;
 	while (tmp)
 	{
@@ -349,7 +349,7 @@ void Commands::addDataManuallyQuestion()
 
 void Commands::enterFileNameAgainQuestion(bool& tmp)
 {
-	std::cout << "Do you want to continue (y/n) " << std::endl;
+	std::cout << "Do you want to continue with another file ? (y/n) " << std::endl;
 
 	bool tmp2 = true;
 	while (tmp2)
@@ -376,7 +376,7 @@ void Commands::enterFileNameAgainQuestion(bool& tmp)
 void Commands::enterTheInformationForDateAgainQuestion(bool& tmp,int& i)
 {
 	std::cout << "The information for this date of July has already been filled. " << std::endl;
-	std::cout << "Do you want to repeat the information (y/n) ?" << std::endl;
+	std::cout << "Do you want to fill the information for another day of July? (y/n) " << std::endl;
 
 	bool tmp2 = true;
 	while (tmp2)
@@ -765,10 +765,6 @@ std::vector<DayParameters> Commands::filterAcceptableDays()
 
 DayParameters Commands::filterMostAppropriateDay(std::vector<DayParameters>& dates)
 {
-	if (dates.size() == 1)
-	{
-		return dates[0];
-	}
 	return (*std::min_element(dates.begin(), dates.end(), [](const DayParameters& first, const DayParameters& second) { return (first.getWind() < second.getWind()
 		|| (first.getWind() == second.getWind() && first.getHumidity() < second.getHumidity()));}));
 	
@@ -820,6 +816,7 @@ void Commands::createDataFile()
 	}
 	std::vector<std::vector<std::string>> table = fillTable();
 	writeTableInFile(table, file2);
+	std::cout << "The weather report file has been successfully created. " << std::endl;
 	file2.close();
 		
 }

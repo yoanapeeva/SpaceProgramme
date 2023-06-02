@@ -9,7 +9,7 @@ void User::setFileName(std::string fileName)
 	}
 	else
 	{
-		throw std::invalid_argument("The file format is incorrect");
+		throw std::invalid_argument("The file format is incorrect.");
 	}
 }
 

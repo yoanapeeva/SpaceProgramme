@@ -9,10 +9,11 @@ class SendEmail
 private :
 	EnterData data;
 public:
+	void greating();
 	EnterData getData()const;
 	void enterData();
 	void sendEmail();
-
+	void startApplication();
 	std::string base64Encode(const std::string& input);
 	Commands getCommands()const;
 	std::string getFileName()const;
