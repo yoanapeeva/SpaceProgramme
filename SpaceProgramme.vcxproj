@@ -112,7 +112,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -133,14 +133,16 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Cloud.cpp" />
+    <ClCompile Include="EnterData.cpp" />
     <ClCompile Include="HelperFunction.cpp" />
     <ClCompile Include="DayParameters.cpp" />
     <ClCompile Include="Commands.cpp" />
+    <ClCompile Include="SendEmail.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="User.cpp" />
   </ItemGroup>
@@ -148,6 +150,8 @@
     <ClInclude Include="Cloud.h" />
     <ClInclude Include="DayParameters.h" />
     <ClInclude Include="Commands.h" />
+    <ClInclude Include="EnterData.h" />
+    <ClInclude Include="SendEmail.h" />
     <ClInclude Include="User.h" />
     <ClInclude Include="HelperFunction.h" />
   </ItemGroup>

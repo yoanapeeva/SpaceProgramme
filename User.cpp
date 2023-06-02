@@ -3,7 +3,7 @@
 void User::setFileName(std::string fileName)
 {
 	int length = fileName.size();
-	if (fileName.substr(length - 4, length ) == ".csv")
+	if (fileName.size()>4&&fileName.substr(length - 4, length ) == ".csv")
 	{
 		this->fileName = fileName;
 	}
@@ -31,4 +31,19 @@ void User::setReceiverEmail(std::string receiverEmail)
 std::string User::getFileName() const
 {
 	return this->fileName;
+}
+
+std::string User::getPassword() const
+{
+	return this->password;
+}
+
+std::string User::getSenderEmail() const
+{
+	return this->senderEmail;
+}
+
+std::string User::getReceiverEmail() const
+{
+	return this->receiverEmail;
 }

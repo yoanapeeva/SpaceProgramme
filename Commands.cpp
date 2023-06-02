@@ -22,6 +22,24 @@ bool Commands::getError() const
 	return this->error;
 }
 
+std::string Commands::getFileName() const
+{
+	return this->getUser().getFileName();
+}
+
+std::string Commands::getPassword() const
+{
+	return this->getUser().getPassword();
+}
+
+std::string Commands::getSenderEmail() const
+{
+	return this->getUser().getSenderEmail();
+}
+std::string Commands::getReceiverEmail() const
+{
+	return this->getUser().getReceiverEmail();
+}
 void Commands::setError(bool error)
 {
 	this->error = error;
@@ -186,6 +204,7 @@ void Commands::enterPassword()
 		std::cout << "*";
 		password += ch;
 	}
+	std::cout<<std::endl;
 	userSetRassword(password);
 }
 
@@ -750,9 +769,9 @@ DayParameters Commands::filterMostAppropriateDay(std::vector<DayParameters>& dat
 	{
 		return dates[0];
 	}
-	std::sort(dates.begin(), dates.end(), [](const DayParameters& first, const DayParameters& second) { return (first.getWind() < second.getWind()
-		|| (first.getWind() == second.getWind() && first.getHumidity() < second.getHumidity())); });
-	return dates[0];
+	return (*std::min_element(dates.begin(), dates.end(), [](const DayParameters& first, const DayParameters& second) { return (first.getWind() < second.getWind()
+		|| (first.getWind() == second.getWind() && first.getHumidity() < second.getHumidity()));}));
+	
 }
 
 std::vector<std::vector<std::string>> Commands::fillTable()
@@ -792,7 +811,7 @@ std::vector<std::vector<std::string>> Commands::fillParametersTable()
 	return table;
 }
 
-void Commands::createNewFile()
+void Commands::createDataFile()
 {
 	std::ofstream file2("WeatherReport.csv", std::ofstream::trunc);
 	if (!file2.is_open()) {

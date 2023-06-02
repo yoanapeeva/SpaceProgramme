@@ -17,5 +17,8 @@ public:
 	void setReceiverEmail(std::string receiverEmail);
 
 	std::string getFileName() const;
+	std::string getPassword() const;
+	std::string getSenderEmail() const;
+	std::string getReceiverEmail() const;
 
 };

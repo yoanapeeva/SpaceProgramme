@@ -1,12 +1,11 @@
 #include"DayParameters.h"
-#include"Commands.h"
+#include"SendEmail.h"
 
 int main()
 {
-	Commands a;
-	a.enterNameOfFile();
-	a.openFile();
-	a.createNewFile();
-	std::cout << "";
+	SendEmail a;
+	a.enterData();
+	a.sendEmail();
+	
 
 }

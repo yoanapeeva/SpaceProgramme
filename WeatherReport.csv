@@ -1,7 +1,7 @@
 Parameter,Average value,Max value,Min value,Median value,Launch Day
-Temperature (C),1.000000,1,1,1.000000,N/A
-Wind speed (m/s),1.000000,1,1,1.000000,N/A
-Humidity (%),1.000000,1,1,1.000000,N/A
-Precipitation (%),1.000000,1,1,1.000000,N/A
-Lightning (y/n),,,,,N/A
-Clouds,,,,,N/A
+Temperature (C),N/A,N/A,N/A,N/A,N/A
+Wind speed (m/s),N/A,N/A,N/A,N/A,N/A
+Humidity (%),N/A,N/A,N/A,N/A,N/A
+Precipitation (%),N/A,N/A,N/A,N/A,N/A
+Lightning (y/n),N/A,N/A,N/A,N/A,N/A
+Clouds,N/A,N/A,N/A,N/A,N/A

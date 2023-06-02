@@ -24,6 +24,11 @@ public:
 	std::set<int> getDatesOfJuly()const;
 	bool getError()const;
 
+	std::string getFileName()const;
+	std::string getPassword()const;
+	std::string getSenderEmail()const;
+	std::string getReceiverEmail()const;
+
 	void setError(bool error);
 
 	void setDays(int index,int day);
@@ -39,6 +44,7 @@ public:
 	void userSetRassword(std::string password);
 	void userSetSenderEmail(std::string senderEmail);
 	void userSetReceiverEmail(std::string receiverEmail);
+
 	void insertDay(DayParameters& day);
 	void insertDatesOfJuly(int day);
 	
@@ -106,7 +112,7 @@ public:
 	std::vector<std::vector<std::string>> fillTable();
 	std::vector<std::vector<std::string>> fillParametersTable();
 
-	void createNewFile();
+	void createDataFile();
 	void writeTableInFile(std::vector<std::vector<std::string>>& table,std::ofstream& file);
 
 
