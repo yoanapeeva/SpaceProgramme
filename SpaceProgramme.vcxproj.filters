@@ -33,10 +33,10 @@
     <ClCompile Include="User.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EnterData.cpp">
+    <ClCompile Include="SendEmail.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SendEmail.cpp">
+    <ClCompile Include="StartApp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -59,7 +59,7 @@
     <ClInclude Include="SendEmail.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EnterData.h">
+    <ClInclude Include="StartApp.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

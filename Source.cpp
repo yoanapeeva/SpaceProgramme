@@ -1,9 +1,9 @@
 #include"DayParameters.h"
-#include"SendEmail.h"
+#include"StartApp.h"
 
 int main()
 {
-	SendEmail app;
+	StartApp app;
 	app.startApplication();
 	return 0;
 

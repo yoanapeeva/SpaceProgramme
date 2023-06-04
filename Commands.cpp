@@ -1,10 +1,10 @@
 #include "Commands.h"
-#include <conio.h>
 
 
-User Commands::getUser() const
+
+std::string Commands::getFileName() const
 {
-	return this->user;
+	return this->fileName;
 }
 
 std::vector<DayParameters> Commands::getDays() const
@@ -22,24 +22,20 @@ bool Commands::getError() const
 	return this->error;
 }
 
-std::string Commands::getFileName() const
+
+void Commands::setFileName(std::string fileName)
 {
-	return this->getUser().getFileName();
+	int length = fileName.size();
+	if (fileName.size() > 4 && fileName.substr(length - 4, length) == ".csv")
+	{
+		this->fileName = fileName;
+	}
+	else
+	{
+		throw std::invalid_argument("The file format is incorrect.");
+	}
 }
 
-std::string Commands::getPassword() const
-{
-	return this->getUser().getPassword();
-}
-
-std::string Commands::getSenderEmail() const
-{
-	return this->getUser().getSenderEmail();
-}
-std::string Commands::getReceiverEmail() const
-{
-	return this->getUser().getReceiverEmail();
-}
 void Commands::setError(bool error)
 {
 	this->error = error;
@@ -80,26 +76,6 @@ void Commands::setCloudType(int index, std::string type)
 	this->days[index].setCloudsType(type);
 }
 
-void Commands::userSetFileName(std::string fileName)
-{
-	this->user.setFileName(fileName);
-}
-
-void Commands::userSetRassword(std::string password)
-{
-	this->user.setPassword(password);
-}
-
-void Commands::userSetSenderEmail(std::string senderEmail)
-{
-	this->user.setSenderEmail(senderEmail);
-}
-
-void Commands::userSetReceiverEmail(std::string receiverEmail)
-{
-	this->user.setReceiverEmail(receiverEmail);
-}
-
 void Commands::insertDay(DayParameters& day)
 {
 	this->days.push_back(day);
@@ -115,14 +91,42 @@ void Commands::clearDatesOfJuly()
 	this->datesOfJuly.clear();
 }
 
+void Commands::clearDays()
+{
+	this->days.clear();
+}
+
 void Commands::resaizeDays(int size)
 {
 	this->days.resize(size);
 }
+void Commands::enterNameOfFile()
+{
+	std::string fileName;
+	std::cout << "Please enter the name of the file : (csv format)" << std::endl;
+	bool tmp = true;
+	while (tmp)
+	{
+		try
+		{
+			std::cin >> fileName;
+			setFileName(fileName);
+			tmp = false;
+		}
+		catch (std::invalid_argument& e)
+		{
+			std::cerr << e.what() << std::endl;
+			enterFileNameAgainQuestion(tmp);
+
+		}
+	}
+}
+
+
 
 void Commands::openFile()
 {
-	std::ifstream file(getUser().getFileName());
+	std::ifstream file(getFileName());
 
 	if (!file.is_open())
 	{
@@ -148,6 +152,7 @@ void Commands::openFile()
 	if (getError())
 	{
 		clearDatesOfJuly();
+		clearDays();
 		std::cerr << "The file could not be processed." << std::endl;
 	}
 
@@ -156,70 +161,6 @@ void Commands::openFile()
 	
 }
 
-void Commands::readAllInformationFromFile(std::ifstream& file)
-{
-	std::string line;
-	std::vector<std::vector<std::string>> table;
-	readTextFromFile(file, line, table);
-	if (getError())
-	{
-		throw std::invalid_argument("The file could not be processed.");
-	}
-
-	resaizeDays(table[0].size() - 1);
-
-	readAllTableRows(table);
-}
-
-void Commands::enterNameOfFile()
-{
-	std::string fileName;
-	std::cout << "Please enter the name of the file : (csv format)" << std::endl;
-	bool tmp = true;
-	while (tmp)
-	{
-		try
-		{
-			std::cin >> fileName;
-			userSetFileName(fileName);
-			tmp = false;
-		}
-		catch (std::invalid_argument& e)
-		{
-			std::cerr << e.what() << std::endl;
-			enterFileNameAgainQuestion(tmp);
-		
-		}
-	}
-}
-
-void Commands::enterPassword()
-{
-	std::string password;
-	std::cout << "Please enter your password : " << std::endl;
-	
-	char ch;
-	while ((ch = _getch()) != '\r')
-	{
-		std::cout << "*";
-		password += ch;
-	}
-	std::cout<<std::endl;
-	userSetRassword(password);
-}
-
-void Commands::enterEmails()
-{
-	std::string senderEmail;
-	std::string receiverEmail;
-	std::cout << "Please enter your email : " << std::endl;
-	std::cin >> senderEmail;
-	std::cout << "Please enter an email address to connect with : " << std::endl;
-	std::cin >> receiverEmail;
-	userSetSenderEmail(senderEmail);
-	userSetReceiverEmail(receiverEmail);
-
-}
 void Commands::readTextFromFile(std::ifstream& file, std::string line, std::vector<std::vector<std::string>>& table)
 {
 	for (int i = 0; i < 7; i++)
@@ -241,7 +182,7 @@ void Commands::readTextFromFile(std::ifstream& file, std::string line, std::vect
 	}
 }
 
-void Commands::readTableFromFile(std::vector<std::vector<std::string>>& table, std::string& line, int& startPosition, int& endPosition,int i,std::ifstream& file)
+void Commands::readTableFromFile(std::vector<std::vector<std::string>>& table, std::string& line, int& startPosition, int& endPosition, int i, std::ifstream& file)
 {
 	std::string word;
 	word = line.substr(startPosition, endPosition - startPosition);
@@ -258,23 +199,172 @@ void Commands::readTableFromFile(std::vector<std::vector<std::string>>& table, s
 
 }
 
+
+
+void Commands::readIndexDayRow(std::vector<std::vector<std::string>>& table)
+{
+	for (int i = 0; i < table[0].size() - 1; i++)
+	{
+		try
+		{
+			setDays(i, std::stoi(table[0][i + 1]));
+			insertDatesOfJuly(std::stoi(table[0][i + 1]));
+		}
+		catch (std::out_of_range& e)
+		{
+			std::cerr << "There is an invalid date in the table. " << std::endl;
+			setError(true);
+			return;
+		}
+	}
+}
+
+void Commands::readTemperatureRow(std::vector<std::vector<std::string>>& table)
+{
+	for (int i = 0; i < table[1].size() - 1; i++)
+	{
+		setTemperature(i, std::stoi(table[1][i + 1]));
+	}
+}
+
+void Commands::readWindSpeedRow(std::vector<std::vector<std::string>>& table)
+{
+	for (int i = 0; i < table[2].size() - 1; i++)
+	{
+		try
+		{
+			setWindSpeed(i, std::stoi(table[2][i + 1]));
+		}
+		catch (std::out_of_range& e)
+		{
+			std::cerr << "There is an invalid wind speed in the table. " << std::endl;
+			setError(true);
+			return;
+		}
+	}
+}
+
+void Commands::readHumidityRow(std::vector<std::vector<std::string>>& table)
+{
+	for (int i = 0; i < table[3].size() - 1; i++)
+	{
+		try
+		{
+			setHumidity(i, std::stoi(table[3][i + 1]));
+		}
+		catch (std::out_of_range& e)
+		{
+			std::cerr << "There is an invalid humidity percentage in the table. " << std::endl;
+			setError(true);
+			return;
+		}
+	}
+}
+
+void Commands::readPrecipitationRow(std::vector<std::vector<std::string>>& table)
+{
+	for (int i = 0; i < table[4].size() - 1; i++)
+	{
+		try
+		{
+			setPrecipitation(i, std::stoi(table[4][i + 1]));
+		}
+		catch (std::out_of_range& e)
+		{
+			std::cerr << "There is an invalid precipitation percentage in the table. " << std::endl;
+			setError(true);
+			return;
+		}
+	}
+}
+
+void Commands::readLightningRow(std::vector<std::vector<std::string>>& table)
+{
+	for (int i = 0; i < table[5].size() - 1; i++)
+	{
+		try
+		{
+			setLightning(i, table[5][i + 1]);
+		}
+		catch (std::invalid_argument& e)
+		{
+			std::cerr << "There is an invalid information for lightninng storms in the table. " << std::endl;
+			setError(true);
+			return;
+		}
+	}
+
+}
+
+void Commands::readCloudRow(std::vector<std::vector<std::string>>& table)
+{
+	for (int i = 0; i < table[6].size() - 1; i++)
+	{
+		try
+		{
+			setCloudType(i, table[6][i + 1]);
+		}
+		catch (std::invalid_argument& e)
+		{
+			std::cerr << "There is an invalid cloud type in the table. " << std::endl;
+			setError(true);
+			return;
+		}
+	}
+}
+
+void Commands::readAllTableRows(std::vector<std::vector<std::string>>& table)
+{
+	readIndexDayRow(table);
+
+	readTemperatureRow(table);
+
+	readWindSpeedRow(table);
+
+	readHumidityRow(table);
+
+	readPrecipitationRow(table);
+
+	readLightningRow(table);
+
+	readCloudRow(table);
+}
+
+
+void Commands::readAllInformationFromFile(std::ifstream& file)
+{
+	std::string line;
+	std::vector<std::vector<std::string>> table;
+	readTextFromFile(file, line, table);
+	if (getError())
+	{
+		throw std::invalid_argument("The file could not be processed.");
+	}
+
+	resaizeDays(table[0].size() - 1);
+
+	readAllTableRows(table);
+}
+
+
+
 void Commands::additionalData()
 {
 	std::cout << "--------------------------------------------------------------------" << std::endl;
 	std::cout << "Please enter the number of days which will be added to the table : " << std::endl;
 	int numberOfDays;
-	numberOfDays= enterNumberOfAdditionalDates();
+	numberOfDays = enterNumberOfAdditionalDates();
 	enterAdditionalDates(numberOfDays);
 }
 
 int Commands::enterNumberOfAdditionalDates()
 {
-	int numberOfDays=0;
+	int numberOfDays = 0;
 	std::cin >> numberOfDays;
 	bool tmp = true;
 	while (tmp)
 	{
-		if (numberOfDays <= 0 || numberOfDays > 32||numberOfDays>(31-getDatesOfJuly().size()))
+		if (numberOfDays <= 0 || numberOfDays > 32 || numberOfDays > (31 - getDatesOfJuly().size()))
 		{
 			std::cout << "Invalid number." << std::endl;
 			std::cout << "Please enter a number again : " << std::endl;
@@ -373,7 +463,7 @@ void Commands::enterFileNameAgainQuestion(bool& tmp)
 	}
 }
 
-void Commands::enterTheInformationForDateAgainQuestion(bool& tmp,int& i)
+void Commands::enterTheInformationForDateAgainQuestion(bool& tmp, int& i)
 {
 	std::cout << "The information for this date of July has already been filled. " << std::endl;
 	std::cout << "Do you want to fill the information for another day of July? (y/n) " << std::endl;
@@ -402,137 +492,6 @@ void Commands::enterTheInformationForDateAgainQuestion(bool& tmp,int& i)
 		}
 	}
 }
-
-
-void Commands::readIndexDayRow(std::vector<std::vector<std::string>>& table)
-{
-	for (int i = 0; i < table[0].size() - 1; i++)
-	{
-		try
-		{
-			setDays(i,std::stoi(table[0][i + 1]));
-			insertDatesOfJuly(std::stoi(table[0][i + 1]));
-		}
-		catch (std::out_of_range& e)
-		{
-			std::cerr << "There is an invalid date in the table. " << std::endl;
-			setError(true);
-			return;
-		}
-	}
-}
-
-void Commands::readTemperatureRow(std::vector<std::vector<std::string>>& table)
-{
-	for (int i = 0; i < table[1].size() - 1; i++)
-	{
-		setTemperature(i,std::stoi(table[1][i + 1]));
-	}
-}
-
-void Commands::readWindSpeedRow(std::vector<std::vector<std::string>>& table)
-{
-	for (int i = 0; i < table[2].size() - 1; i++)
-	{
-		try
-		{
-			setWindSpeed(i,std::stoi(table[2][i + 1]));
-		}
-		catch (std::out_of_range& e)
-		{ 
-			std::cerr << "There is an invalid wind speed in the table. " << std::endl;
-			setError(true);
-			return;
-		}
-	}
-}
-
-void Commands::readHumidityRow(std::vector<std::vector<std::string>>& table)
-{
-	for (int i = 0; i < table[3].size() - 1; i++)
-	{
-		try
-		{
-			setHumidity(i,std::stoi(table[3][i + 1]));
-		}
-		catch (std::out_of_range& e)
-		{
-			std::cerr << "There is an invalid humidity percentage in the table. " << std::endl;
-			setError(true);
-			return;
-		}
-	}
-}
-
-void Commands::readPrecipitationRow(std::vector<std::vector<std::string>>& table)
-{
-	for (int i = 0; i < table[4].size() - 1; i++)
-	{
-		try
-		{
-			setPrecipitation(i,std::stoi(table[4][i + 1]));
-		}
-		catch (std::out_of_range& e)
-		{
-			std::cerr << "There is an invalid precipitation percentage in the table. " << std::endl;
-			setError(true);
-			return;
-		}
-	}
-}
-
-void Commands::readLightningRow(std::vector<std::vector<std::string>>& table)
-{
-	for (int i = 0; i < table[5].size() - 1; i++)
-	{
-		try
-		{
-			setLightning(i,table[5][i + 1]);
-		}
-		catch (std::invalid_argument& e)
-		{
-			std::cerr << "There is an invalid information for lightninng storms in the table. " << std::endl;
-			setError(true);
-			return;
-		}
-	}
-	
-}
-
-void Commands::readCloudRow(std::vector<std::vector<std::string>>& table)
-{
-	for (int i = 0; i < table[6].size() - 1; i++)
-	{
-		try
-		{
-			setCloudType(i,table[6][i + 1]);
-		}
-		catch (std::invalid_argument& e)
-		{
-			std::cerr << "There is an invalid cloud type in the table. " << std::endl;
-			setError(true);
-			return;
-		}
-	}
-}
-
-void Commands::readAllTableRows(std::vector<std::vector<std::string>>& table)
-{
-	readIndexDayRow(table);
-
-	readTemperatureRow(table);
-
-	readWindSpeedRow(table);
-
-	readHumidityRow(table);
-
-	readPrecipitationRow(table);
-
-	readLightningRow(table);
-
-	readCloudRow(table);
-}
-
 
 
 double Commands::averageTemperature()
@@ -714,6 +673,27 @@ void Commands::fillMedianColumn(std::vector<std::vector<std::string>>& table)
 	table[6].push_back("");
 }
 
+
+std::vector<DayParameters> Commands::filterAcceptableDays()
+{
+	std::vector<DayParameters> filtred;
+	for (int i = 0; i < getDays().size(); i++)
+	{
+		if (getDays()[i].isAcceptable())
+		{
+			filtred.push_back(getDays()[i]);
+		}
+	}
+	return filtred;
+}
+
+DayParameters Commands::filterMostAppropriateDay(std::vector<DayParameters>& dates)
+{
+	return (*std::min_element(dates.begin(), dates.end(), [](const DayParameters& first, const DayParameters& second) { return (first.getWind() < second.getWind()
+		|| (first.getWind() == second.getWind() && first.getHumidity() < second.getHumidity()));}));
+	
+}
+
 void Commands::fillParametersColumn(std::vector<std::vector<std::string>>& table)
 {
 	fillAverageColumn(table);
@@ -724,7 +704,7 @@ void Commands::fillParametersColumn(std::vector<std::vector<std::string>>& table
 
 void Commands::fillLaunchDayColumn(std::vector<std::vector<std::string>>& table, DayParameters& day)
 {
-	table[0][5] += " - "+ std::to_string(day.getDay()) + " July";
+	table[0][5] += " - " + std::to_string(day.getDay()) + " July";
 	table[1].push_back(std::to_string(day.getTemperature()));
 	table[2].push_back(std::to_string(day.getWind()));
 	table[3].push_back(std::to_string(day.getHumidity()));
@@ -750,25 +730,20 @@ void Commands::fillEmptyTable(std::vector<std::vector<std::string>>& table)
 	}
 }
 
-std::vector<DayParameters> Commands::filterAcceptableDays()
+std::vector<std::vector<std::string>> Commands::fillParametersTable()
 {
-	std::vector<DayParameters> filtred;
-	for (int i = 0; i < getDays().size(); i++)
-	{
-		if (getDays()[i].isAcceptable())
-		{
-			filtred.push_back(getDays()[i]);
-		}
-	}
-	return filtred;
+	std::vector<std::vector<std::string>> table;
+	std::vector<std::string> line{"Parameter", "Average value","Max value","Min value","Median value","Launch Day" };
+	table.push_back(line);
+	table.push_back({ "Temperature (C)" });
+	table.push_back({ "Wind speed (m/s)" });
+	table.push_back({ "Humidity (%)" });
+	table.push_back({ "Precipitation (%)" });
+	table.push_back({ "Lightning (y/n)" });
+	table.push_back({ "Clouds" });
+	return table;
 }
 
-DayParameters Commands::filterMostAppropriateDay(std::vector<DayParameters>& dates)
-{
-	return (*std::min_element(dates.begin(), dates.end(), [](const DayParameters& first, const DayParameters& second) { return (first.getWind() < second.getWind()
-		|| (first.getWind() == second.getWind() && first.getHumidity() < second.getHumidity()));}));
-	
-}
 
 std::vector<std::vector<std::string>> Commands::fillTable()
 {
@@ -790,20 +765,6 @@ std::vector<std::vector<std::string>> Commands::fillTable()
 	{
 		fillEmptyColumn(table);
 	}
-	return table;
-}
-
-std::vector<std::vector<std::string>> Commands::fillParametersTable()
-{
-	std::vector<std::vector<std::string>> table;
-	std::vector<std::string> line{"Parameter", "Average value","Max value","Min value","Median value","Launch Day" };
-	table.push_back(line);
-	table.push_back({ "Temperature (C)" });
-	table.push_back({ "Wind speed (m/s)" });
-	table.push_back({ "Humidity (%)" });
-	table.push_back({ "Precipitation (%)" });
-	table.push_back({ "Lightning (y/n)" });
-	table.push_back({ "Clouds" });
 	return table;
 }
 
@@ -831,4 +792,11 @@ void Commands::writeTableInFile(std::vector<std::vector<std::string>>& table,std
 		}
 		file << table[i][5]<<std::endl;
 	}
+}
+
+void Commands::enterAllInformation()
+{
+	enterNameOfFile();
+	openFile();
+	createDataFile();
 }

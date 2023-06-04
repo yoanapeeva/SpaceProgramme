@@ -1,5 +1,7 @@
 #pragma once
 #include<iostream>
+
+//class with static functions for verification of words
 class HelperFunction
 {
 public:

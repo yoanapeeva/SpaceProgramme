@@ -11,7 +11,40 @@ DayParameters::DayParameters()
 	type = CloudType::Cumulus;
 }
 
+int DayParameters::getDay() const
+{
+	return this->day;
+}
 
+int DayParameters::getTemperature() const
+{
+	return this->temperature;
+}
+
+int DayParameters::getWind() const
+{
+	return this->wind;
+}
+
+int DayParameters::getHumidity() const
+{
+	return this->humidity;
+}
+
+int DayParameters::getPrecipitation() const
+{
+	return this->precipitation;
+}
+
+bool DayParameters::getLightning() const
+{
+	return this->lightning;
+}
+
+CloudType DayParameters::getCloudType() const
+{
+	return this->type;
+}
 void DayParameters::setDay(int day)
 {
 	if (day > 0 && day < 32)
@@ -91,40 +124,6 @@ void DayParameters::setCloudsType(std::string type)
 
 }
 
-int DayParameters::getDay() const
-{
-	return this->day;
-}
-
-int DayParameters::getTemperature() const
-{
-	return this->temperature;
-}
-
-int DayParameters::getWind() const
-{
-	return this->wind;
-}
-
-int DayParameters::getHumidity() const
-{
-	return this->humidity;
-}
-
-int DayParameters::getPrecipitation() const
-{
-	return this->precipitation;
-}
-
-bool DayParameters::getLightning() const
-{
-	return this->lightning;
-}
-
-CloudType DayParameters::getCloudType() const
-{
-	return this->type;
-}
 
 bool DayParameters::isAcceptable()
 {
@@ -146,21 +145,6 @@ std::string DayParameters::convertCloudTypeToToString()
 	return Cloud::convertCloudTypeToString(getCloudType());
 }
 
-
-std::istream& operator>>(std::istream& is, DayParameters& day)
-{
-	std::cout << "Please enter the data for the day : " << std::endl;
-
-	enterDate(is, day);
-	enterTemperaturre(is, day);
-	enterWind(is, day);
-	enterHumidity(is, day);
-	enterPrecipitation(is, day);
-	enterLightning(is, day);
-	enterCloudType(is, day);
-	
-	return is;
-}
 
 void enterDate(std::istream& is, DayParameters& day)
 {
@@ -306,4 +290,20 @@ void enterCloudType(std::istream& is, DayParameters& day)
 			std::cerr << "Please enter the type of clouds again : " << std::endl;
 		}
 	}
+}
+
+
+std::istream& operator>>(std::istream& is, DayParameters& day)
+{
+	std::cout << "Please enter the data for the day : " << std::endl;
+
+	enterDate(is, day);
+	enterTemperaturre(is, day);
+	enterWind(is, day);
+	enterHumidity(is, day);
+	enterPrecipitation(is, day);
+	enterLightning(is, day);
+	enterCloudType(is, day);
+
+	return is;
 }

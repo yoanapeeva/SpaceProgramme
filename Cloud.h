@@ -2,6 +2,7 @@
 #include<iostream>
 #include "HelperFunction.h"
 
+//enum class for cloud type
 enum class CloudType
 {
 	Cumulus,

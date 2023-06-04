@@ -1,20 +1,31 @@
 #include "SendEmail.h"
 
-void SendEmail::greating()
+
+
+
+
+User SendEmail::getUser() const
 {
-    std::cout << "Welcome on board!" << std::endl;
-    std::cout << "Our mission is to provide accurate weather information for our upcoming trip in July."<<std::endl;
+    return this->user;
 }
 
-EnterData SendEmail::getData() const
+
+
+std::string SendEmail::getPassword() const
 {
-    return this->data;
+    return this->getUser().getPassword();
 }
 
-void SendEmail::enterData()
+std::string SendEmail::getSenderEmail() const
 {
-	this->data.enterAllInformation();
+    return this->getUser().getSenderEmail();
 }
+
+std::string SendEmail::getReceiverEmail() const
+{
+    return this->getUser().getReceiverEmail();
+}
+
 
 
 std::string SendEmail::base64Encode(const std::string& input)
@@ -22,32 +33,7 @@ std::string SendEmail::base64Encode(const std::string& input)
     return input;
 }
 
-Commands SendEmail::getCommands() const
-{
-    return this->getData().getCommands();
-}
-
-std::string SendEmail::getFileName() const
-{
-    return this->getCommands().getFileName();
-}
-
-std::string SendEmail::getPassword() const
-{
-    return this->getCommands().getPassword();
-}
-
-std::string SendEmail::getSenderEmail() const
-{
-    return this->getCommands().getSenderEmail();
-}
-
-std::string SendEmail::getReceiverEmail() const
-{
-    return this->getCommands().getReceiverEmail();
-}
-
-//the data for the server is from internet resources;
+//the data for the server is from external resources;
 //--------------------------------------------------
 void SendEmail::sendEmail()
 {
@@ -168,12 +154,6 @@ void SendEmail::sendEmail()
 
 }
 
-void SendEmail::startApplication()
-{
-    greating();
-    enterData();
-    sendEmail();
-}
 
 
 

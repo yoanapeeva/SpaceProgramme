@@ -1,17 +1,6 @@
 #include "User.h"
 
-void User::setFileName(std::string fileName)
-{
-	int length = fileName.size();
-	if (fileName.size()>4&&fileName.substr(length - 4, length ) == ".csv")
-	{
-		this->fileName = fileName;
-	}
-	else
-	{
-		throw std::invalid_argument("The file format is incorrect.");
-	}
-}
+
 
 void User::setPassword(std::string password)
 {
@@ -28,10 +17,7 @@ void User::setReceiverEmail(std::string receiverEmail)
 	this->receiverEmail = receiverEmail;
 }
 
-std::string User::getFileName() const
-{
-	return this->fileName;
-}
+
 
 std::string User::getPassword() const
 {
@@ -46,4 +32,38 @@ std::string User::getSenderEmail() const
 std::string User::getReceiverEmail() const
 {
 	return this->receiverEmail;
+}
+
+
+void User::enterPassword()
+{
+	std::string password;
+	std::cout << "Please enter your password : " << std::endl;
+
+	char ch;
+	while ((ch = _getch()) != '\r')
+	{
+		std::cout << "*";
+		password += ch;
+	}
+	std::cout << std::endl;
+	setPassword(password);
+}
+
+void User::enterEmails()
+{
+	std::string senderEmail;
+	std::string receiverEmail;
+	std::cout << "Please enter your email : " << std::endl;
+	std::cin >> senderEmail;
+	std::cout << "Please enter recipient email address : " << std::endl;
+	std::cin >> receiverEmail;
+	setSenderEmail(senderEmail);
+	setReceiverEmail(receiverEmail);
+}
+
+void User::setDataUser()
+{
+	enterEmails();
+	enterPassword();
 }

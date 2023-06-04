@@ -9,26 +9,33 @@
 #include "DayParameters.h"
 #include "User.h"
 
+//class to read (write) from (in) a file
 class Commands
 {
 private:
-	User user;
+	
+	std::string fileName;
 	std::vector<DayParameters> days;
+
+	//checks if the information for a date has been already filled
 	std::set<int> datesOfJuly;
+
+	//check if there are any errors in the information table or during the opening of the user's file.
 	bool error;
+
 public:
 	Commands():error(false) {};
 
-	User getUser()const;
+	//getters 
+	std::string getFileName()const;
 	std::vector<DayParameters> getDays() const;
 	std::set<int> getDatesOfJuly()const;
 	bool getError()const;
 
-	std::string getFileName()const;
-	std::string getPassword()const;
-	std::string getSenderEmail()const;
-	std::string getReceiverEmail()const;
+	
 
+	//setters
+	void setFileName(std::string fileName);
 	void setError(bool error);
 
 	void setDays(int index,int day);
@@ -40,34 +47,24 @@ public:
 	void setCloudType(int index, std::string type);
 
 
-	void userSetFileName(std::string fileName);
-	void userSetRassword(std::string password);
-	void userSetSenderEmail(std::string senderEmail);
-	void userSetReceiverEmail(std::string receiverEmail);
-
 	void insertDay(DayParameters& day);
 	void insertDatesOfJuly(int day);
 	
 
 	void clearDatesOfJuly();	
+	void clearDays();
 	void resaizeDays(int size);
 
-	void openFile();
-	void readAllInformationFromFile(std::ifstream& file);
+	//functions to entering the user`s data 
 	void enterNameOfFile();
-	void enterPassword();
-	void enterEmails();
-	void additionalData();
-	int enterNumberOfAdditionalDates();
-	void enterAdditionalDates(int numberOfDays);
+	
 
+	//function to read from a file
+	void openFile();
 
-	void addDataManuallyQuestion();
-	void enterFileNameAgainQuestion(bool& tmp);
-	void enterTheInformationForDateAgainQuestion(bool& tmp,int&);
-
-	void readTextFromFile(std::ifstream& file,std::string line, std::vector<std::vector<std::string>>& table);
-	void readTableFromFile(std::vector<std::vector<std::string>>& table,std::string& line, int& startPosition, int& endPosition,int i, std::ifstream& file);
+	//funtion to fill the DayPrameter structure with the data from the file
+	void readTextFromFile(std::ifstream& file, std::string line, std::vector<std::vector<std::string>>& table);
+	void readTableFromFile(std::vector<std::vector<std::string>>& table, std::string& line, int& startPosition, int& endPosition, int i, std::ifstream& file);
 	void readIndexDayRow(std::vector<std::vector<std::string>>& table);
 	void readTemperatureRow(std::vector<std::vector<std::string>>& table);
 	void readWindSpeedRow(std::vector<std::vector<std::string>>& table);
@@ -76,7 +73,20 @@ public:
 	void readLightningRow(std::vector<std::vector<std::string>>& table);
 	void readCloudRow(std::vector<std::vector<std::string>>& table);
 	void readAllTableRows(std::vector<std::vector<std::string>>& table);
+	void readAllInformationFromFile(std::ifstream& file);
 
+	//functions that provide the opportunity for manually entering weather data.
+	void additionalData();
+	int enterNumberOfAdditionalDates();
+	void enterAdditionalDates(int numberOfDays);
+
+	//helpful function for repeating a question
+	void addDataManuallyQuestion();
+	void enterFileNameAgainQuestion(bool& tmp);
+	void enterTheInformationForDateAgainQuestion(bool& tmp,int&);
+
+
+	//functions to calculate the average/max/min/median values
 	double averageTemperature();
 	double averageWind();
 	double averageHumidity();
@@ -100,20 +110,25 @@ public:
 	double medianHumidity();
 	double medianPrecipitation();
 	void fillMedianColumn(std::vector<std::vector<std::string>>& table);
+	
 
-	void fillParametersColumn(std::vector<std::vector<std::string>>& table);
-	void fillLaunchDayColumn(std::vector<std::vector<std::string>>& table,  DayParameters& day);
-	void fillEmptyColumn(std::vector<std::vector<std::string>>& table);
-	void fillEmptyTable(std::vector<std::vector<std::string>>& table);
-
-
+	//functions to filter the most suitable day for launch
 	std::vector<DayParameters> filterAcceptableDays();
 	DayParameters filterMostAppropriateDay(std::vector<DayParameters>& dates);
-	std::vector<std::vector<std::string>> fillTable();
+	
+	//function to fill the table for the weather report
+	void fillParametersColumn(std::vector<std::vector<std::string>>& table);
+	void fillLaunchDayColumn(std::vector<std::vector<std::string>>& table, DayParameters& day);
+	void fillEmptyColumn(std::vector<std::vector<std::string>>& table);
+	void fillEmptyTable(std::vector<std::vector<std::string>>& table);
 	std::vector<std::vector<std::string>> fillParametersTable();
+	std::vector<std::vector<std::string>> fillTable();
 
+	//functions for creating and writing in the weather report file 
 	void createDataFile();
 	void writeTableInFile(std::vector<std::vector<std::string>>& table,std::ofstream& file);
+
+	void enterAllInformation();
 
 
 
